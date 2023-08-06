@@ -19,7 +19,24 @@ def scrape_weather_data(url):
         print("Error accessing the website.")
         return None
 
+def post_data_to_website(url, data):
+    # Replace 'your_endpoint_url' with the actual URL where you want to post the data
+    endpoint_url = "https://nicolelaine.github.io/temperature"
+    payload = {"data": data}
+
+    try:
+        response = requests.post(endpoint_url, data=payload)
+        if response.status_code == 200:
+            print("Data posted successfully.")
+        else:
+            print("Failed to post data. Status Code:", response.status_code)
+    except requests.exceptions.RequestException as e:
+        print("Error posting data:", e)
+
 if __name__ == "__main__":
     url = "https://www.wunderground.com/weather/us/az/tucson/KAZTUCSO658"
-    data = scrape_weather_data(url)
-    print(data)
+    scraped_data = scrape_weather_data(url)
+
+    # If data is not found, don't post to the website
+    if scraped_data != "Data not found.":
+        post_data_to_website("https://nicolelaine.github.io/temperature", scraped_data)
